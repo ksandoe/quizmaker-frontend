@@ -1,0 +1,47 @@
+{
+  "customHeaders": [
+    {
+      "pattern": "**/*.{js,css,html,png,jpg,jpeg,gif,svg,ico,woff,woff2}",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public,max-age=31536000,immutable"
+        }
+      ]
+    },
+    {
+      "pattern": "/*",
+      "headers": [
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json)$)([^.]+$)/>",
+      "target": "/index.html",
+      "status": "200"
+    }
+  ],
+  "performance": {
+    "autoEnableCloudFront": true,
+    "cloudFrontDistributionSettings": {
+      "priceClass": "PriceClass_All",
+      "compress": true,
+      "defaultTTL": 86400,
+      "maxTTL": 31536000,
+      "minTTL": 0
+    }
+  }
+}
