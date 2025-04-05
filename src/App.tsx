@@ -6,11 +6,10 @@ import {
 } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { Toaster } from 'react-hot-toast';
-import { AuthTest } from './components/AuthTest';
+import { Login } from './components/Login';
 import VideoForm from './components/VideoForm';
 import { VideoSegmentation } from './components/VideoSegmentation';
 import { Dashboard } from './components/Dashboard';
-import { Login } from './components/Login';
 import PrivateRoute from './components/PrivateRoute';
 
 const router = createBrowserRouter(
