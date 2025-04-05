@@ -1,14 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
-import envPlugin from './vite-env-plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    envPlugin()
-  ],
+  plugins: [react()],
   build: {
     sourcemap: false,
     minify: 'terser',
