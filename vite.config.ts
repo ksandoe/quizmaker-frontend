@@ -23,12 +23,7 @@ export default defineConfig({
       }
     }
   },
-  define: {
-    'VITE_SUPABASE_URL': JSON.stringify(process.env.VITE_SUPABASE_URL),
-    'VITE_SUPABASE_ANON_KEY': JSON.stringify(process.env.VITE_SUPABASE_ANON_KEY),
-    'VITE_YOUTUBE_API_KEY': JSON.stringify(process.env.VITE_YOUTUBE_API_KEY),
-    'VITE_API_URL': JSON.stringify(process.env.VITE_API_URL)
-  },
+  envPrefix: 'VITE_',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src')
