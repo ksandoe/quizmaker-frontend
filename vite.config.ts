@@ -5,7 +5,12 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  envPrefix: 'VITE_',
+  define: {
+    __SUPABASE_URL__: JSON.stringify(process.env.VITE_SUPABASE_URL || ''),
+    __SUPABASE_ANON_KEY__: JSON.stringify(process.env.VITE_SUPABASE_ANON_KEY || ''),
+    __YOUTUBE_API_KEY__: JSON.stringify(process.env.VITE_YOUTUBE_API_KEY || ''),
+    __API_URL__: JSON.stringify(process.env.VITE_API_URL || '')
+  },
   build: {
     sourcemap: false,
     minify: 'terser',
