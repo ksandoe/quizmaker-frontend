@@ -58,32 +58,38 @@ export async function createVideo(data: NewVideo): Promise<Video | null> {
   const url = `${window.location.origin}${apiUrl}/transcript/transcribe`;
   console.log('Making request to:', url);
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
-    },
-    body: JSON.stringify({ url: data.url })
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    console.error('API Error:', {
-      status: response.status,
-      statusText: response.statusText,
-      body: text
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
+      },
+      body: JSON.stringify({ url: data.url })
     });
-    try {
-      const result = JSON.parse(text) as { error: string };
-      throw new Error(result.error || 'Failed to create video');
-    } catch (e) {
-      throw new Error(`Failed to create video: ${response.status} ${response.statusText}`);
-    }
-  }
 
-  const result = await response.json() as { video: Video };
-  return result.video;
+    if (!response.ok) {
+      const text = await response.text();
+      console.error('API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        body: text
+      });
+      try {
+        const result = JSON.parse(text) as { error: string };
+        throw new Error(result.error || `Failed to create video: ${response.status}`);
+      } catch (e) {
+        throw new Error(`Failed to create video: ${response.status} ${response.statusText}`);
+      }
+    }
+
+    const result = await response.json() as { video: Video };
+    return result.video;
+  } catch (error) {
+    console.error('Network or parsing error:', error);
+    throw error;
+  }
 }
 
 export async function getVideo(video_id: string): Promise<Video> {
@@ -227,36 +233,42 @@ export async function regenerateQuestion(question_id: string): Promise<Question>
   const url = `${window.location.origin}${apiUrl}/questions/regenerate`;
   console.log('Making request to:', url);
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
-    },
-    body: JSON.stringify({
-      question_id,
-      segment_content: question.segments.content,
-      question_number: question.question_number
-    })
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    console.error('API Error:', {
-      status: response.status,
-      statusText: response.statusText,
-      body: text
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
+      },
+      body: JSON.stringify({
+        question_id,
+        segment_content: question.segments.content,
+        question_number: question.question_number
+      })
     });
-    try {
-      const error = JSON.parse(text) as { message: string };
-      throw new Error(error.message || 'Failed to regenerate question');
-    } catch (e) {
-      throw new Error(`Failed to regenerate question: ${response.status} ${response.statusText}`);
-    }
-  }
 
-  const updatedQuestion = await response.json() as { question: Question };
-  return updatedQuestion.question;
+    if (!response.ok) {
+      const text = await response.text();
+      console.error('API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: url,
+        body: text
+      });
+      try {
+        const result = JSON.parse(text) as { error: string };
+        throw new Error(result.error || `Failed to regenerate question: ${response.status}`);
+      } catch (e) {
+        throw new Error(`Failed to regenerate question: ${response.status} ${response.statusText}`);
+      }
+    }
+
+    const result = await response.json() as { question: Question };
+    return result.question;
+  } catch (error) {
+    console.error('Network or parsing error:', error);
+    throw error;
+  }
 }
 
 export async function deleteQuiz(video_id: string) {

@@ -29,7 +29,8 @@ frontend:
           value: 'nosniff'
         - key: 'Content-Security-Policy'
           value: "default-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://www.googleapis.com /api/*;"
-  proxies:
-    - path: '/api'
-      target: 'http://quizmaker-alb-884886554.us-east-1.elb.amazonaws.com'
+  redirects:
+    - source: '/api/<*>'
+      target: 'http://quizmaker-alb-884886554.us-east-1.elb.amazonaws.com/<*>'
       status: '200'
+      condition: null
