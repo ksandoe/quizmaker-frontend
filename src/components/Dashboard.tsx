@@ -116,6 +116,27 @@ export function Dashboard() {
                     </span>
                   </div>
 
+                  <div className="mt-2 space-y-2">
+                    {quiz.duration_seconds && (
+                      <p className="text-sm text-gray-600">
+                        Duration: {Math.floor(quiz.duration_seconds / 60)}:{(quiz.duration_seconds % 60).toString().padStart(2, '0')}
+                      </p>
+                    )}
+                    {quiz.word_count && (
+                      <p className="text-sm text-gray-600">
+                        Words: {quiz.word_count.toLocaleString()}
+                      </p>
+                    )}
+                    {quiz.max_segments && (
+                      <p className="text-sm text-gray-600">
+                        Segments: {quiz.max_segments}
+                      </p>
+                    )}
+                    <p className="text-sm text-gray-600">
+                      Created: {new Date(quiz.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
+
                   <div className="flex justify-between mt-4">
                     <button
                       onClick={() => navigate(`/video/${quiz.video_id}/segments`)}
