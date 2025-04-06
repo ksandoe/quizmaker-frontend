@@ -68,13 +68,13 @@ export function Dashboard() {
           <div className="flex gap-4">
             <button
               onClick={() => navigate('/video/new')}
-              className="btn-primary px-4 py-2 rounded-md"
+              className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Create New Quiz
             </button>
             <button
               onClick={() => signOut()}
-              className="btn-danger px-4 py-2 rounded-md"
+              className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
               Sign Out
             </button>
@@ -116,37 +116,29 @@ export function Dashboard() {
                     </span>
                   </div>
 
-                  <div className="mt-2 space-y-2">
-                    {quiz.duration_seconds && (
-                      <p className="text-sm text-gray-600">
-                        Duration: {Math.floor(quiz.duration_seconds / 60)}:{(quiz.duration_seconds % 60).toString().padStart(2, '0')}
-                      </p>
-                    )}
+                  <div className="mt-2 text-sm text-gray-600 space-y-1">
                     {quiz.word_count && (
-                      <p className="text-sm text-gray-600">
-                        Words: {quiz.word_count.toLocaleString()}
-                      </p>
+                      <p>Words: {quiz.word_count.toLocaleString()}</p>
+                    )}
+                    {quiz.duration_seconds && (
+                      <p>Duration: {Math.floor(quiz.duration_seconds / 60)}:{(quiz.duration_seconds % 60).toString().padStart(2, '0')}</p>
                     )}
                     {quiz.max_segments && (
-                      <p className="text-sm text-gray-600">
-                        Segments: {quiz.max_segments}
-                      </p>
+                      <p>Segments: {quiz.max_segments}</p>
                     )}
-                    <p className="text-sm text-gray-600">
-                      Created: {new Date(quiz.created_at).toLocaleDateString()}
-                    </p>
+                    <p>Created: {new Date(quiz.created_at).toLocaleDateString()}</p>
                   </div>
 
                   <div className="flex justify-between mt-4">
                     <button
                       onClick={() => navigate(`/video/${quiz.video_id}/segments`)}
-                      className="btn-primary px-3 py-1 rounded-md text-sm"
+                      className="inline-flex justify-center px-3 py-1 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                       Edit Questions
                     </button>
                     <button
                       onClick={() => handleDelete(quiz.video_id)}
-                      className="btn-danger px-3 py-1 rounded-md text-sm"
+                      className="inline-flex justify-center px-3 py-1 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                     >
                       Delete
                     </button>
