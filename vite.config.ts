@@ -32,9 +32,9 @@ export default defineConfig({
   },
   envPrefix: 'VITE_',
   define: {
-    'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(process.env.VITE_SUPABASE_URL),
-    'import.meta.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(process.env.VITE_SUPABASE_ANON_KEY),
-    'import.meta.env.VITE_YOUTUBE_API_KEY': JSON.stringify(process.env.VITE_YOUTUBE_API_KEY),
-    'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL)
+    __SUPABASE_URL__: JSON.stringify(process.env.VITE_SUPABASE_URL),
+    __SUPABASE_ANON_KEY__: JSON.stringify(process.env.VITE_SUPABASE_ANON_KEY),
+    __YOUTUBE_API_KEY__: JSON.stringify(process.env.VITE_YOUTUBE_API_KEY),
+    __API_URL__: JSON.stringify(process.env.VITE_API_URL)
   }
 })
