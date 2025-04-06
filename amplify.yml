@@ -29,24 +29,12 @@ frontend:
           value: 'nosniff'
         - key: 'Content-Security-Policy'
           value: "default-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://www.googleapis.com https://main.d1o0o1gklfpr2x.amplifyapp.com;"
-  redirects:
-    - source: '/api/transcript/transcribe'
-      target: 'http://quizmaker-alb-884886554.us-east-1.elb.amazonaws.com/transcript/transcribe'
-      status: '200'
-      condition: null
-      headers:
-        Access-Control-Allow-Origin: '*'
-        Access-Control-Allow-Headers: '*'
-        Access-Control-Allow-Methods: 'GET,POST,PUT,DELETE,OPTIONS'
-    - source: '/api/questions/regenerate'
-      target: 'http://quizmaker-alb-884886554.us-east-1.elb.amazonaws.com/questions/regenerate'
-      status: '200'
-      condition: null
-      headers:
-        Access-Control-Allow-Origin: '*'
-        Access-Control-Allow-Headers: '*'
-        Access-Control-Allow-Methods: 'GET,POST,PUT,DELETE,OPTIONS'
   rewrites:
-    - source: '</^[^.]+$|\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json)$)([^.]+$)/'
+    - source: '/<*>'
       target: '/index.html'
       status: '200'
+      condition: 'undefined'
+    - source: '/api/<*>'
+      target: 'http://quizmaker-alb-884886554.us-east-1.elb.amazonaws.com/<*>'
+      status: '200'
+      condition: 'undefined'

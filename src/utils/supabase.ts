@@ -50,13 +50,12 @@ export async function updateVideo(video_id: string, data: Partial<Video>) {
 }
 
 export async function createVideo(data: NewVideo): Promise<Video | null> {
-  const apiUrl = import.meta.env.VITE_API_URL;
-  if (!apiUrl) {
-    throw new Error('Missing required environment variable VITE_API_URL');
-  }
+  const apiUrl = import.meta.env.VITE_API_URL || '/api';
+  console.log('Using API URL:', apiUrl);
 
-  // Construct the full URL using window.location.origin
-  const url = `${window.location.origin}${apiUrl}/transcript/transcribe`;
+  // Remove any trailing slash from the API URL
+  const baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
+  const url = `${window.location.origin}${baseUrl}/transcript/transcribe`;
   console.log('Making request to:', url);
 
   try {
@@ -65,22 +64,7 @@ export async function createVideo(data: NewVideo): Promise<Video | null> {
       throw new Error('No authentication token available');
     }
 
-    // First send an OPTIONS request to check CORS
-    const optionsResponse = await fetch(url, {
-      method: 'OPTIONS',
-      headers: {
-        'Access-Control-Request-Method': 'POST',
-        'Access-Control-Request-Headers': 'content-type,authorization',
-        'Origin': window.location.origin
-      }
-    });
-
-    console.log('OPTIONS response:', {
-      status: optionsResponse.status,
-      headers: Object.fromEntries(optionsResponse.headers.entries())
-    });
-
-    // Then send the actual POST request
+    // Send the POST request directly
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -89,7 +73,6 @@ export async function createVideo(data: NewVideo): Promise<Video | null> {
         'Accept': 'application/json',
         'Origin': window.location.origin
       },
-      credentials: 'include',
       body: JSON.stringify({ url: data.url })
     });
 
