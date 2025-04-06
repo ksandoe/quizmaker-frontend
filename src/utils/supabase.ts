@@ -18,16 +18,16 @@ export type NewResponse = Database['public']['Tables']['responses']['Insert'];
 export type { Database };
 
 // Create Supabase client
-declare const __SUPABASE_URL__: string;
-declare const __SUPABASE_ANON_KEY__: string;
+const supabaseUrl = process.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
 
-if (!__SUPABASE_URL__ || !__SUPABASE_ANON_KEY__) {
+if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing required environment variables VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY');
 }
 
 export const supabase = createClient<Database>(
-  __SUPABASE_URL__,
-  __SUPABASE_ANON_KEY__,
+  supabaseUrl,
+  supabaseAnonKey,
   {
     auth: {
       autoRefreshToken: true,
