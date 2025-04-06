@@ -55,16 +55,24 @@ export async function createVideo(data: NewVideo): Promise<Video | null> {
     throw new Error('Missing required environment variable VITE_API_URL');
   }
 
+  // Construct the full URL using window.location.origin
   const url = `${window.location.origin}${apiUrl}/transcript/transcribe`;
   console.log('Making request to:', url);
 
   try {
+    const token = (await supabase.auth.getSession()).data.session?.access_token;
+    if (!token) {
+      throw new Error('No authentication token available');
+    }
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
       },
+      credentials: 'include',
       body: JSON.stringify({ url: data.url })
     });
 
@@ -74,7 +82,8 @@ export async function createVideo(data: NewVideo): Promise<Video | null> {
         status: response.status,
         statusText: response.statusText,
         url: url,
-        body: text
+        body: text,
+        headers: Object.fromEntries(response.headers.entries())
       });
       try {
         const result = JSON.parse(text) as { error: string };
