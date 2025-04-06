@@ -5,6 +5,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  envPrefix: 'VITE_',
   build: {
     sourcemap: false,
     minify: 'terser',
@@ -23,7 +24,6 @@ export default defineConfig({
       }
     }
   },
-  envPrefix: 'VITE_',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src')
