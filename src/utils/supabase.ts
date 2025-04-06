@@ -65,12 +65,29 @@ export async function createVideo(data: NewVideo): Promise<Video | null> {
       throw new Error('No authentication token available');
     }
 
+    // First send an OPTIONS request to check CORS
+    const optionsResponse = await fetch(url, {
+      method: 'OPTIONS',
+      headers: {
+        'Access-Control-Request-Method': 'POST',
+        'Access-Control-Request-Headers': 'content-type,authorization',
+        'Origin': window.location.origin
+      }
+    });
+
+    console.log('OPTIONS response:', {
+      status: optionsResponse.status,
+      headers: Object.fromEntries(optionsResponse.headers.entries())
+    });
+
+    // Then send the actual POST request
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Origin': window.location.origin
       },
       credentials: 'include',
       body: JSON.stringify({ url: data.url })

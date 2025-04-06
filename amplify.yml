@@ -46,3 +46,7 @@ frontend:
         Access-Control-Allow-Origin: '*'
         Access-Control-Allow-Headers: '*'
         Access-Control-Allow-Methods: 'GET,POST,PUT,DELETE,OPTIONS'
+  rewrites:
+    - source: '</^[^.]+$|\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map|json)$)([^.]+$)/'
+      target: '/index.html'
+      status: '200'
