@@ -50,7 +50,12 @@ export async function updateVideo(video_id: string, data: Partial<Video>) {
 }
 
 export async function createVideo(data: NewVideo): Promise<Video | null> {
-  const response = await fetch('/api/transcript/transcribe', {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  if (!apiUrl) {
+    throw new Error('Missing required environment variable VITE_API_URL');
+  }
+
+  const response = await fetch(`${apiUrl}/api/transcript/transcribe`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -201,8 +206,13 @@ export async function regenerateQuestion(question_id: string): Promise<Question>
   if (questionError) throw questionError;
   if (!question) throw new Error('Question not found');
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+  if (!apiUrl) {
+    throw new Error('Missing required environment variable VITE_API_URL');
+  }
+
   // Call our local API to regenerate the question
-  const response = await fetch('/api/questions/regenerate', {
+  const response = await fetch(`${apiUrl}/api/questions/regenerate`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
