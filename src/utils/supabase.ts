@@ -50,12 +50,16 @@ export async function updateVideo(video_id: string, data: Partial<Video>) {
 }
 
 export async function createVideo(data: NewVideo): Promise<Video | null> {
-  const apiUrl = import.meta.env.VITE_API_URL;
+  const apiUrl = import.meta.env.VITE_API_URL?.replace(/\/+$/, ''); // Remove trailing slashes
   if (!apiUrl) {
     throw new Error('Missing required environment variable VITE_API_URL');
   }
 
-  const response = await fetch(`${apiUrl}/api/transcript/transcribe`, {
+  // Ensure URL is absolute and properly formatted
+  const url = new URL('/transcript/transcribe', apiUrl).toString();
+  console.log('Making request to:', url);
+
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -65,8 +69,18 @@ export async function createVideo(data: NewVideo): Promise<Video | null> {
   });
 
   if (!response.ok) {
-    const result = await response.json() as { error: string };
-    throw new Error(result.error || 'Failed to create video');
+    const text = await response.text();
+    console.error('API Error:', {
+      status: response.status,
+      statusText: response.statusText,
+      body: text
+    });
+    try {
+      const result = JSON.parse(text) as { error: string };
+      throw new Error(result.error || 'Failed to create video');
+    } catch (e) {
+      throw new Error(`Failed to create video: ${response.status} ${response.statusText}`);
+    }
   }
 
   const result = await response.json() as { video: Video };
@@ -206,13 +220,16 @@ export async function regenerateQuestion(question_id: string): Promise<Question>
   if (questionError) throw questionError;
   if (!question) throw new Error('Question not found');
 
-  const apiUrl = import.meta.env.VITE_API_URL;
+  const apiUrl = import.meta.env.VITE_API_URL?.replace(/\/+$/, ''); // Remove trailing slashes
   if (!apiUrl) {
     throw new Error('Missing required environment variable VITE_API_URL');
   }
 
-  // Call our local API to regenerate the question
-  const response = await fetch(`${apiUrl}/api/questions/regenerate`, {
+  // Ensure URL is absolute and properly formatted
+  const url = new URL('/questions/regenerate', apiUrl).toString();
+  console.log('Making request to:', url);
+
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -226,8 +243,18 @@ export async function regenerateQuestion(question_id: string): Promise<Question>
   });
 
   if (!response.ok) {
-    const error = await response.json() as { message: string };
-    throw new Error(error.message || 'Failed to regenerate question');
+    const text = await response.text();
+    console.error('API Error:', {
+      status: response.status,
+      statusText: response.statusText,
+      body: text
+    });
+    try {
+      const error = JSON.parse(text) as { message: string };
+      throw new Error(error.message || 'Failed to regenerate question');
+    } catch (e) {
+      throw new Error(`Failed to regenerate question: ${response.status} ${response.statusText}`);
+    }
   }
 
   const updatedQuestion = await response.json() as { question: Question };
