@@ -50,13 +50,12 @@ export async function updateVideo(video_id: string, data: Partial<Video>) {
 }
 
 export async function createVideo(data: NewVideo): Promise<Video | null> {
-  const apiUrl = import.meta.env.VITE_API_URL?.replace(/\/+$/, ''); // Remove trailing slashes
+  const apiUrl = import.meta.env.VITE_API_URL;
   if (!apiUrl) {
     throw new Error('Missing required environment variable VITE_API_URL');
   }
 
-  // Ensure URL is absolute and properly formatted
-  const url = new URL('/api/transcript/transcribe', window.location.origin).toString();
+  const url = new URL('/transcript/transcribe', apiUrl).toString();
   console.log('Making request to:', url);
 
   const response = await fetch(url, {
@@ -220,13 +219,12 @@ export async function regenerateQuestion(question_id: string): Promise<Question>
   if (questionError) throw questionError;
   if (!question) throw new Error('Question not found');
 
-  const apiUrl = import.meta.env.VITE_API_URL?.replace(/\/+$/, ''); // Remove trailing slashes
+  const apiUrl = import.meta.env.VITE_API_URL;
   if (!apiUrl) {
     throw new Error('Missing required environment variable VITE_API_URL');
   }
 
-  // Ensure URL is absolute and properly formatted
-  const url = new URL('/api/questions/regenerate', window.location.origin).toString();
+  const url = new URL('/questions/regenerate', apiUrl).toString();
   console.log('Making request to:', url);
 
   const response = await fetch(url, {
