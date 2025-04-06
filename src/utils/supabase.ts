@@ -56,7 +56,7 @@ export async function createVideo(data: NewVideo): Promise<Video | null> {
   }
 
   // Ensure URL is absolute and properly formatted
-  const url = new URL('/transcript/transcribe', apiUrl).toString();
+  const url = new URL('/api/transcript/transcribe', window.location.origin).toString();
   console.log('Making request to:', url);
 
   const response = await fetch(url, {
@@ -226,7 +226,7 @@ export async function regenerateQuestion(question_id: string): Promise<Question>
   }
 
   // Ensure URL is absolute and properly formatted
-  const url = new URL('/questions/regenerate', apiUrl).toString();
+  const url = new URL('/api/questions/regenerate', window.location.origin).toString();
   console.log('Making request to:', url);
 
   const response = await fetch(url, {
