@@ -6,6 +6,8 @@ frontend:
         - npm ci
     build:
       commands:
+        - echo "Building with environment variables from Amplify Console"
+        - env | grep VITE_
         - npm run build
   artifacts:
     baseDirectory: dist
