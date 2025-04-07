@@ -50,12 +50,9 @@ export async function updateVideo(video_id: string, data: Partial<Video>) {
 }
 
 export async function createVideo(data: NewVideo): Promise<Video | null> {
-  const apiUrl = import.meta.env.VITE_API_URL || '/api';
-  console.log('Using API URL:', apiUrl);
-
-  // Remove any trailing slash from the API URL
-  const baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
-  const url = `${window.location.origin}${baseUrl}/transcript/transcribe`;
+  // Use ALB URL directly
+  const apiUrl = import.meta.env.VITE_API_URL || 'https://api.quizmaker.opennote.org';
+  const url = `${apiUrl}/transcript/transcribe`;
   console.log('Making request to:', url);
 
   try {
@@ -64,14 +61,12 @@ export async function createVideo(data: NewVideo): Promise<Video | null> {
       throw new Error('No authentication token available');
     }
 
-    // Send the POST request directly
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json',
-        'Origin': window.location.origin
+        'Accept': 'application/json'
       },
       body: JSON.stringify({ url: data.url })
     });
@@ -234,12 +229,8 @@ export async function regenerateQuestion(question_id: string): Promise<Question>
   if (questionError) throw questionError;
   if (!question) throw new Error('Question not found');
 
-  const apiUrl = import.meta.env.VITE_API_URL;
-  if (!apiUrl) {
-    throw new Error('Missing required environment variable VITE_API_URL');
-  }
-
-  const url = `${window.location.origin}${apiUrl}/questions/regenerate`;
+  const apiUrl = import.meta.env.VITE_API_URL || 'https://api.quizmaker.opennote.org';
+  const url = `${apiUrl}/questions/regenerate`;
   console.log('Making request to:', url);
 
   try {

@@ -28,13 +28,11 @@ frontend:
         - key: 'X-Content-Type-Options'
           value: 'nosniff'
         - key: 'Content-Security-Policy'
-          value: "default-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://www.googleapis.com https://main.d1o0o1gklfpr2x.amplifyapp.com;"
+          value: "default-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://www.googleapis.com https://api.quizmaker.opennote.org;"
   rewrites:
-    - source: '/<*>'
+    - source: '/'
       target: '/index.html'
       status: '200'
-      condition: 'undefined'
-    - source: '/api/<*>'
-      target: 'http://quizmaker-alb-884886554.us-east-1.elb.amazonaws.com/<*>'
+    - source: '/video/*'
+      target: '/index.html'
       status: '200'
-      condition: 'undefined'
