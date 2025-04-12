@@ -52,7 +52,7 @@ export async function updateVideo(video_id: string, data: Partial<Video>) {
 export async function createVideo(data: NewVideo): Promise<Video | null> {
   // Use ALB URL directly
   const apiUrl = import.meta.env.VITE_API_URL || 'https://api.quizmaker.opennote.org';
-  const url = `${apiUrl}/transcript/transcribe`;
+  const url = `${apiUrl}/api/transcript/transcribe`;
   console.log('Making request to:', url);
 
   try {
@@ -230,7 +230,7 @@ export async function regenerateQuestion(question_id: string): Promise<Question>
   if (!question) throw new Error('Question not found');
 
   const apiUrl = import.meta.env.VITE_API_URL || 'https://api.quizmaker.opennote.org';
-  const url = `${apiUrl}/questions/regenerate`;
+  const url = `${apiUrl}/api/questions/regenerate`;
   console.log('Making request to:', url);
 
   try {
